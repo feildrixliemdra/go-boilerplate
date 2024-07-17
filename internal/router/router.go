@@ -2,15 +2,18 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-boilerplate/internal/handler"
 )
 
 type router struct {
-	handler *gin.Engine
+	rtr     *gin.Engine
+	handler *handler.Handler
 }
 
-func NewRouter(handler *gin.Engine) Router {
+func NewRouter(rtr *gin.Engine, handler *handler.Handler) Router {
 	return &router{
-		handler: handler,
+		rtr,
+		handler,
 	}
 }
 
@@ -19,15 +22,12 @@ type Router interface {
 }
 
 func (r *router) Init() {
-	r.handler.GET("/ping", func(c *gin.Context) {
+
+	r.rtr.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
 
-	r.handler.GET("", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"status": "OK",
-		})
-	})
+	r.rtr.GET("/example", r.handler.ExampleHandler.GetAll)
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	log "github.com/sirupsen/logrus"
-	"go-boilerplate/internal/bootstrap"
 	"go-boilerplate/internal/config"
 	"net/http"
 	"os"
@@ -27,14 +26,10 @@ type httpServer struct {
 	handler http.Handler
 }
 
-func NewHTTPServer() Server {
-	cfg := bootstrap.NewConfig()
-
-	httpHandler := bootstrap.RegistryGinRouter(cfg.App.ReleaseMode)
-
+func NewHTTPServer(cfg *config.Config, handler http.Handler) Server {
 	return &httpServer{
+		handler: handler,
 		config:  cfg,
-		handler: httpHandler.Handler(),
 	}
 }
 
