@@ -2,6 +2,9 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-boilerplate/internal/payload"
+	"go-boilerplate/internal/util"
+	"net/http"
 )
 
 type exampleHandler struct {
@@ -10,6 +13,7 @@ type exampleHandler struct {
 
 type IExampleHandler interface {
 	GetAll(c *gin.Context)
+	Create(c *gin.Context)
 }
 
 func NewExampleHandler(option Option) IExampleHandler {
@@ -19,5 +23,32 @@ func NewExampleHandler(option Option) IExampleHandler {
 }
 
 func (h *exampleHandler) GetAll(c *gin.Context) {
-	c.JSON(200, gin.H{"data": h.Service.ExampleService.GetAll()})
+	list := h.Service.ExampleService.GetAll()
+	util.GeneralSuccessResponse(c, "success get example list", list)
+}
+
+func (h *exampleHandler) Create(c *gin.Context) {
+
+	var (
+		req = payload.CreateExampleRequest{}
+		err = c.ShouldBindJSON(&req)
+	)
+
+	if err != nil {
+		util.ErrBindResponse(c, err)
+		return
+	}
+
+	err = h.Service.ExampleService.Create(req)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"message": "internal error",
+		})
+
+		return
+	}
+
+	util.GeneralSuccessResponse(c, "success create example", nil)
+
+	return
 }

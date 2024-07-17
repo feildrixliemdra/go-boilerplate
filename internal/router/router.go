@@ -29,5 +29,8 @@ func (r *router) Init() {
 		})
 	})
 
-	r.rtr.GET("/example", r.handler.ExampleHandler.GetAll)
+	exampleRouter := r.rtr.Group("/example")
+	exampleRouter.GET("", r.handler.ExampleHandler.GetAll)
+	exampleRouter.POST("", r.handler.ExampleHandler.Create)
+
 }
