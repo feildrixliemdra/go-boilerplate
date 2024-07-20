@@ -5,3 +5,13 @@ app:
   read_timeout: 5
   write_timeout: 5
   release_mode: "debug"
+jwt:
+  secret_key: "694c67a583d5a631a6241469ec7943ac2b0f3d5c62ab56870c08d6f74d6a659f"
+postgre:
+  is_enabled: false
+  url: ""
+  max_idle_conn: 5
+  max_open_conn: 5
+mongodb:
+  is_enabled: false
+  url: ""
