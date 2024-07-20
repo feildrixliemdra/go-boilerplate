@@ -6,6 +6,7 @@ type Config struct {
 	App     App     `mapstructure:"app" yaml:"app"`
 	Postgre Postgre `mapstructure:"postgres" yaml:"postgres"`
 	MongoDB MongoDB `mapstructure:"mongodb" yaml:"mongodb"`
+	JWT     JWT     `mapstructure:"jwt" yaml:"jwt"`
 }
 
 type App struct {
