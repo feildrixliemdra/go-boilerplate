@@ -46,7 +46,7 @@ func (r *router) Init() {
 	//example of JWT middleware
 	authenticateHandler := r.rtr.Group("/authenticated")
 	authenticateHandler.Use(middleware.JWTAuth(r.cfg.JWT.SecretKey))
-	exampleRouter.GET("", r.handler.ExampleHandler.GetAll)
+	authenticateHandler.GET("", r.handler.ExampleHandler.GetAll)
 
 	authorized := r.rtr.Group("/secured", middleware.BasicAuth())
 
