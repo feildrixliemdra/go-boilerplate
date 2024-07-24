@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  my-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /go/src/github.com/feildrixliemdra/go-boilerplate
+    container_name: my-app
+    hostname: my-app
+    networks:
+      - code-network
+    volumes:
+      - .:/go/src/github.com/feildrixliemdra/go-boilerplate
+    ports:
+      - '8081:8081'
+    depends_on:
+      - postgre
+#      - mongo
+  postgre:
+    image: postgres:16.3
+    restart: always
+    container_name: postgre
+    hostname: postgre
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: go-boilerplate
+      PGDATA: /data/postgre
+      POSTGRES_USER: admin
+      TZ: "Asia/Jakarta"
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - code-network
+## uncomment if you need mongodb
+#  mongo:
+#    image: mongo:4.2
+#    container_name: mongo
+#    restart: always
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: secret
+#      TZ: "Asia/Jakarta"
+#    volumes:
+#      - mongo:/data/db
+#    ports:
+#      - 28017:27017
+#
+#  mongo-express:
+#    image: mongo-express
+#    container_name: mongo-express
+#    restart: always
+#    ports:
+#      - 9081:8081
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: secret
+
+volumes:
+  postgre:
+    driver: local
+  #  mongo:
+#    driver: local
+
+
+networks:
+  code-network:
+    driver: bridge
