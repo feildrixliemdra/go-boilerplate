@@ -24,11 +24,10 @@ func Start() {
 		appCtxOption = appcontext.Option{
 			Config: cfg,
 		}
-		appCtx     = appcontext.NewAppContext(cfg)
-		repository *repository.Repository
-		hndler     *handler.Handler
-		svc        *service.Service
-		router     *gin.Engine
+		repo   *repository.Repository
+		hndler *handler.Handler
+		svc    *service.Service
+		router *gin.Engine
 	)
 
 	// bootstrap dependency
@@ -60,12 +59,14 @@ func Start() {
 		}
 	}
 
-	repository = appCtx.InitiateRepository(postgreConn)
+	repo = repository.InitiateRepository(repository.Option{
+		Option: appCtxOption,
+		DB:     postgreConn,
+	})
 	svc = service.InitiateService(service.Option{
 		Option:     appCtxOption,
-		Repository: repository,
+		Repository: repo,
 	})
-
 	hndler = handler.InitiateHandler(handler.Option{
 		Option:  appCtxOption,
 		Service: svc,

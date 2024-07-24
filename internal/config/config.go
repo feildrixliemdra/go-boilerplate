@@ -4,7 +4,7 @@ package config
 // it use mapstructure tag to map each key because viper use mapstructure and not json or yaml to unnmarshal
 type Config struct {
 	App     App     `mapstructure:"app" yaml:"app"`
-	Postgre Postgre `mapstructure:"postgres" yaml:"postgres"`
+	Postgre Postgre `mapstructure:"postgre" yaml:"postgre"`
 	MongoDB MongoDB `mapstructure:"mongodb" yaml:"mongodb"`
 	JWT     JWT     `mapstructure:"jwt" yaml:"jwt"`
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func InitiatePostgreSQL(cfg *config.Config) (*sqlx.DB, error) {
-	db, err := sqlx.Connect("pgx", cfg.Postgre.URL)
+	db, err := sqlx.Connect("pgx", cfg.Postgre.URL) // you can change it to mysql or any other supported sql db
 	if err != nil {
 		return db, err
 	}
