@@ -39,14 +39,16 @@ func (r *router) Init() {
 		})
 	})
 
-	exampleRouter := r.rtr.Group("/example")
-	exampleRouter.GET("", r.handler.ExampleHandler.GetAll)
-	exampleRouter.POST("", r.handler.ExampleHandler.Create)
+	userRouter := r.rtr.Group("/users")
+	userRouter.GET("", r.handler.UserHandler.GetAll)
+	userRouter.GET("/:id", r.handler.UserHandler.GetDetail)
+	userRouter.POST("", r.handler.UserHandler.Create)
+	userRouter.PUT("/:id", r.handler.UserHandler.Update)
+	userRouter.DELETE("/:id", r.handler.UserHandler.Delete)
 
 	//example of JWT middleware
 	authenticateHandler := r.rtr.Group("/authenticated")
 	authenticateHandler.Use(middleware.JWTAuth(r.cfg.JWT.SecretKey))
-	authenticateHandler.GET("", r.handler.ExampleHandler.GetAll)
 
 	authorized := r.rtr.Group("/secured", middleware.BasicAuth())
 

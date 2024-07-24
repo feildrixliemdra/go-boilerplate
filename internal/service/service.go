@@ -6,7 +6,7 @@ import (
 )
 
 type Service struct {
-	ExampleService IExampleService
+	UserService IUserService
 }
 
 type Option struct {
@@ -15,10 +15,7 @@ type Option struct {
 }
 
 func InitiateService(option Option) *Service {
-
-	exampleService := NewExampleService(option)
-
 	return &Service{
-		ExampleService: exampleService,
+		UserService: NewUserService(option),
 	}
 }

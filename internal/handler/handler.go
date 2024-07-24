@@ -6,7 +6,7 @@ import (
 )
 
 type Handler struct {
-	ExampleHandler IExampleHandler
+	UserHandler IUserHandler
 }
 
 type Option struct {
@@ -15,10 +15,7 @@ type Option struct {
 }
 
 func InitiateHandler(opt Option) *Handler {
-
-	example := NewExampleHandler(opt)
-
 	return &Handler{
-		ExampleHandler: example,
+		UserHandler: NewUserHandler(opt),
 	}
 }
