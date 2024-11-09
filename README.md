@@ -53,7 +53,14 @@ A boilerplate for building Go applications quickly and effectively. This templat
 .
 ├── cmd                # Main applications of the project
 ├── pkg                # Library code that's ok to use by external applications
-├── internal           # Private application code
+├── internal           # Private application code (cannot be imported by other projects)
+│   ├── config         # Application configuration and settings
+│   ├── controllers    # Handle HTTP requests and responses, business logic for APIs
+│   ├── models         # Data models representing entities, structs, and database schema
+│   ├── repository     # Data access layer for managing database operations
+│   ├── services       # Core business logic and reusable services for the application
+│   ├── utils          # Utility functions and helper methods
+│   └── middleware     # Custom middleware functions for handling requests and responses
 ├── configs            # Configuration files
 ├── scripts            # Scripts for various tasks
 ├── .env.example       # Environment variables example file
