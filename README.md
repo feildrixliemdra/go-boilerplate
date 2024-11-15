@@ -29,7 +29,9 @@ A boilerplate for building Go applications quickly and effectively. This templat
    ```
 3. Set up environment variables:
    ```sh
-    cp .env.example .env  #fill in necessary values.
+    make env 
+    or
+    cp config/config.yaml.example config/config.yaml  #fill in necessary values. #fill in necessary values.
    ```
 4. Change git remote url to avoid accidental pushes to base project
    ```sh
