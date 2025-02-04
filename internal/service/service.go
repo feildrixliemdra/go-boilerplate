@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-boilerplate/internal/appcontext"
+	"go-boilerplate/internal/config"
 	"go-boilerplate/internal/repository"
 )
 
@@ -10,12 +10,11 @@ type Service struct {
 }
 
 type Option struct {
-	appcontext.Option
 	Repository *repository.Repository
 }
 
-func InitiateService(option Option) *Service {
+func InitiateService(cfg *config.Config, repository *repository.Repository) *Service {
 	return &Service{
-		UserService: NewUserService(option),
+		UserService: NewUserService(repository.UserRepository),
 	}
 }

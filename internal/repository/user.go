@@ -29,7 +29,6 @@ func NewUserRepository(opt Option) IUserRepository {
 }
 
 func (r *user) DeleteByID(ctx context.Context, id uint64) (err error) {
-
 	query, args, err := sq.Update(model.User{}.TableName()).
 		SetMap(
 			sq.Eq{
@@ -39,6 +38,7 @@ func (r *user) DeleteByID(ctx context.Context, id uint64) (err error) {
 		PlaceholderFormat(sq.Dollar).
 		Where(sq.Eq{"id": id}).
 		ToSql()
+
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,6 @@ func (r *user) DeleteByID(ctx context.Context, id uint64) (err error) {
 }
 
 func (r *user) Create(ctx context.Context, user model.User) (err error) {
-
 	query, args, err := sq.Insert(model.User{}.TableName()).
 		SetMap(
 			sq.Eq{
@@ -65,6 +64,7 @@ func (r *user) Create(ctx context.Context, user model.User) (err error) {
 		).
 		PlaceholderFormat(sq.Dollar).
 		ToSql()
+
 	if err != nil {
 		return err
 	}

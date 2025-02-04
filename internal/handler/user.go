@@ -5,8 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cast"
+	"go-boilerplate/internal/config"
 	"go-boilerplate/internal/constant"
 	"go-boilerplate/internal/payload"
+	"go-boilerplate/internal/service"
 	"go-boilerplate/internal/util"
 )
 
@@ -18,17 +20,19 @@ type IUserHandler interface {
 	Delete(c *gin.Context)
 }
 type user struct {
-	Option
+	cfg         *config.Config
+	UserService service.IUserService
 }
 
-func NewUserHandler(opt Option) IUserHandler {
+func NewUserHandler(cfg *config.Config, userService service.IUserService) IUserHandler {
 	return &user{
-		Option: opt,
+		cfg:         cfg,
+		UserService: userService,
 	}
 }
 
 func (h *user) GetAll(c *gin.Context) {
-	result, err := h.Service.UserService.GetList(c)
+	result, err := h.UserService.GetList(c)
 	if err != nil {
 		log.Errorf("error get user list %v", err) // log error
 		util.ErrInternalResponse(c, err)
@@ -53,7 +57,7 @@ func (h *user) GetDetail(c *gin.Context) {
 		return
 	}
 
-	result, err := h.Service.UserService.GetByID(c, uintID)
+	result, err := h.UserService.GetByID(c, uintID)
 	if err != nil {
 		if errors.Is(err, constant.ErrUserNotFound) {
 			log.Warnf("user id not found %v", uintID)
@@ -81,7 +85,7 @@ func (h *user) Create(c *gin.Context) {
 		return
 	}
 
-	err = h.Service.UserService.Create(c, req)
+	err = h.UserService.Create(c, req)
 	if err != nil {
 		if errors.Is(constant.ErrEmailAlreadyRegistered, err) {
 			log.Warnf("%s already registered", req.Email)
@@ -121,7 +125,7 @@ func (h *user) Update(c *gin.Context) {
 		return
 	}
 
-	err = h.Service.UserService.Update(c, req)
+	err = h.UserService.Update(c, req)
 	if err != nil {
 		if errors.Is(constant.ErrUserNotFound, err) {
 			log.Warnf("user id not found %v", req.ID)
@@ -151,7 +155,7 @@ func (h *user) Delete(c *gin.Context) {
 		return
 	}
 
-	err = h.Service.UserService.Delete(c, uintID)
+	err = h.UserService.Delete(c, uintID)
 	if err != nil {
 		if errors.Is(constant.ErrUserNotFound, err) {
 			log.Warnf("user id not found %v", uintID)

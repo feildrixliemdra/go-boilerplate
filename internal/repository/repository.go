@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"go-boilerplate/internal/appcontext"
 )
 
 type Repository struct {
@@ -10,7 +9,6 @@ type Repository struct {
 }
 
 type Option struct {
-	appcontext.Option
 	DB *sqlx.DB
 }
 

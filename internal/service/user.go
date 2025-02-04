@@ -7,6 +7,7 @@ import (
 	"go-boilerplate/internal/dto"
 	"go-boilerplate/internal/model"
 	"go-boilerplate/internal/payload"
+	"go-boilerplate/internal/repository"
 )
 
 type IUserService interface {
@@ -18,19 +19,19 @@ type IUserService interface {
 }
 
 type user struct {
-	Option
+	UserRepository repository.IUserRepository
 }
 
-func NewUserService(option Option) IUserService {
+func NewUserService(repo repository.IUserRepository) IUserService {
 	return &user{
-		Option: option,
+		UserRepository: repo,
 	}
 }
 
 func (s *user) Create(ctx context.Context, p payload.CreateUserRequest) (err error) {
 
 	// 1. make sure no duplicate email
-	existUser, err := s.Repository.UserRepository.GetBy(ctx, model.User{Email: p.Email})
+	existUser, err := s.UserRepository.GetBy(ctx, model.User{Email: p.Email})
 	if err != nil {
 		return err
 	}
@@ -44,12 +45,12 @@ func (s *user) Create(ctx context.Context, p payload.CreateUserRequest) (err err
 	usr := dto.CreateUserPayloadToUserModel(p)
 
 	// 3. update user
-	return s.Repository.UserRepository.Create(ctx, usr)
+	return s.UserRepository.Create(ctx, usr)
 }
 
 func (s *user) GetByID(ctx context.Context, id uint64) (result payload.GetUserDetailData, err error) {
 
-	usr, err := s.Repository.UserRepository.GetBy(ctx, model.User{ID: id})
+	usr, err := s.UserRepository.GetBy(ctx, model.User{ID: id})
 	if err != nil {
 		return
 	}
@@ -65,7 +66,7 @@ func (s *user) GetByID(ctx context.Context, id uint64) (result payload.GetUserDe
 
 func (s *user) GetList(ctx context.Context) (result []payload.GetUserListData, err error) {
 
-	usr, err := s.Repository.UserRepository.GetAll(ctx)
+	usr, err := s.UserRepository.GetAll(ctx)
 	if err != nil {
 		return
 	}
@@ -78,7 +79,7 @@ func (s *user) GetList(ctx context.Context) (result []payload.GetUserListData, e
 func (s *user) Update(ctx context.Context, p payload.UpdateUserRequest) error {
 
 	// 1. make sure user exist
-	currentUser, err := s.Repository.UserRepository.GetBy(ctx, model.User{ID: p.ID})
+	currentUser, err := s.UserRepository.GetBy(ctx, model.User{ID: p.ID})
 	if err != nil {
 		return err
 	}
@@ -91,12 +92,12 @@ func (s *user) Update(ctx context.Context, p payload.UpdateUserRequest) error {
 	usr := dto.UpdateUserPayloadToUserModel(p)
 
 	// 3. update user
-	return s.Repository.UserRepository.Update(ctx, usr)
+	return s.UserRepository.Update(ctx, usr)
 }
 
 func (s *user) Delete(ctx context.Context, id uint64) error {
 	// 1. make sure user exist
-	currentUser, err := s.Repository.UserRepository.GetBy(ctx, model.User{ID: id})
+	currentUser, err := s.UserRepository.GetBy(ctx, model.User{ID: id})
 	if err != nil {
 		return err
 	}
@@ -106,5 +107,5 @@ func (s *user) Delete(ctx context.Context, id uint64) error {
 	}
 
 	// 2. delete user by id
-	return s.Repository.UserRepository.DeleteByID(ctx, id)
+	return s.UserRepository.DeleteByID(ctx, id)
 }

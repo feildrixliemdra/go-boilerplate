@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
-	"go-boilerplate/internal/appcontext"
 	"go-boilerplate/internal/bootstrap"
 	"go-boilerplate/internal/handler"
 	"go-boilerplate/internal/repository"
@@ -17,17 +16,14 @@ import (
 // Start function handler starting http listener
 func Start() {
 	var (
-		cfg          = bootstrap.NewConfig()
-		err          error
-		postgreConn  *sqlx.DB
-		mongoDBConn  *mongo.Client
-		appCtxOption = appcontext.Option{
-			Config: cfg,
-		}
-		repo   *repository.Repository
-		hndler *handler.Handler
-		svc    *service.Service
-		router *gin.Engine
+		cfg         = bootstrap.NewConfig()
+		err         error
+		postgreConn *sqlx.DB
+		mongoDBConn *mongo.Client
+		repo        *repository.Repository
+		hndler      *handler.Handler
+		svc         *service.Service
+		router      *gin.Engine
 	)
 
 	// bootstrap dependency
@@ -60,17 +56,10 @@ func Start() {
 	}
 
 	repo = repository.InitiateRepository(repository.Option{
-		Option: appCtxOption,
-		DB:     postgreConn,
+		DB: postgreConn,
 	})
-	svc = service.InitiateService(service.Option{
-		Option:     appCtxOption,
-		Repository: repo,
-	})
-	hndler = handler.InitiateHandler(handler.Option{
-		Option:  appCtxOption,
-		Service: svc,
-	})
+	svc = service.InitiateService(cfg, repo)
+	hndler = handler.InitiateHandler(cfg, svc)
 
 	router = bootstrap.InitiateGinRouter(cfg, hndler)
 
