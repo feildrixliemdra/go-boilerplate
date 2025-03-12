@@ -15,6 +15,8 @@ type App struct {
 	ReadTimeout  int    `mapstructure:"read_timeout" yaml:"read_timeout"`
 	WriteTimeout int    `mapstructure:"write_timeout" yaml:"write_timeout"`
 	ReleaseMode  string `mapstructure:"release_mode" yaml:"release_mode"`
+	SecretKey    string `mapstructure:"secret_key" yaml:"secret_key"`
+	Env          string `mapstructure:"env" yaml:"env"`
 }
 
 type Postgre struct {

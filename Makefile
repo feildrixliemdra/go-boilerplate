@@ -9,7 +9,7 @@ dev:
 
 
 env:
-	cp config/config.yaml.example config/config.yaml
+	cp .env.example .env
 
 # create new sql db migration file in database/migration
 # example usage: make new-db-migration name="create_user_table"
